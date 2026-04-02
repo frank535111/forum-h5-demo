@@ -1,0 +1,11 @@
+{
+  "name": "forum-h5-demo",
+  "version": "1.0.0",
+  "description": "Forum H5 invitation page",
+  "scripts": {
+    "dev": "vercel dev"
+  },
+  "dependencies": {
+    "crypto": "^1.0.1"
+  }
+}
