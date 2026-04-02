@@ -12,10 +12,8 @@
     <meta property="og:url" content="https://forum-h5-demo.vercel.app">
     <meta property="og:type" content="website">
     
-    <!-- 微信专用分享标签 -->
-    <meta name="wechat:title" content="2026家庭影院技术峰会">
-    <meta name="wechat:description" content="探索视听新未来 · 共创智能新体验">
-    <meta name="wechat:image" content="https://forum-h5-demo.vercel.app/share-preview.jpg">
+    <!-- 微信JSSDK -->
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
     
     <style>
         * {
@@ -755,6 +753,60 @@
             }
         }
 
+        // 微信JSSDK配置
+        function initWeChatShare() {
+            // 检查是否在微信中
+            const isWeChat = /micromessenger/i.test(navigator.userAgent);
+            
+            if (isWeChat) {
+                // 获取微信签名
+                fetch('/api/wechat-signature?url=' + encodeURIComponent(window.location.href))
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            wx.config({
+                                debug: false,
+                                appId: 'wx4630de408a4dfed7',
+                                timestamp: data.timestamp,
+                                nonceStr: data.nonceStr,
+                                signature: data.signature,
+                                jsApiList: ['updateAppMessageShareData', 'updateTimelineShareData']
+                            });
+                            
+                            wx.ready(function() {
+                                // 配置分享给朋友
+                                wx.updateAppMessageShareData({
+                                    title: '2026家庭影院技术峰会邀请函',
+                                    desc: '探索视听新未来 · 共创智能新体验，5月20日广州等你来！',
+                                    link: 'https://forum-h5-demo.vercel.app',
+                                    imgUrl: 'https://forum-h5-demo.vercel.app/share-preview.jpg',
+                                    success: function() {
+                                        console.log('分享配置成功');
+                                    }
+                                });
+                                
+                                // 配置分享到朋友圈
+                                wx.updateTimelineShareData({
+                                    title: '2026家庭影院技术峰会邀请函',
+                                    link: 'https://forum-h5-demo.vercel.app',
+                                    imgUrl: 'https://forum-h5-demo.vercel.app/share-preview.jpg',
+                                    success: function() {
+                                        console.log('朋友圈分享配置成功');
+                                    }
+                                });
+                            });
+                            
+                            wx.error(function(res) {
+                                console.error('微信JSSDK错误:', res);
+                            });
+                        }
+                    })
+                    .catch(err => {
+                        console.error('获取签名失败:', err);
+                    });
+            }
+        }
+
         // 复制链接
         function copyLink() {
             const url = 'https://forum-h5-demo.vercel.app';
@@ -773,6 +825,7 @@
         createParticles();
         createPagination();
         updateCountdown();
+        initWeChatShare(); // 初始化微信分享
         setInterval(updateCountdown, 60000); // 每分钟更新
     </script>
 </body>

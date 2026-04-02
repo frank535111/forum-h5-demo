@@ -14,8 +14,8 @@ export default async function handler(req, res) {
 
     try {
         // 微信公众号配置
-        const appId = 'wx4630de408a4dfed7';
-        const appSecret = 'YOUR_APP_SECRET'; // 需要替换为真实的AppSecret
+        const appId = process.env.WECHAT_APP_ID || 'wx4630de408a4dfed7';
+        const appSecret = process.env.WECHAT_APP_SECRET || '2db763db312f2b4e82f16973121573bc';
         
         // 生成timestamp和nonceStr
         const timestamp = Math.floor(Date.now() / 1000);
