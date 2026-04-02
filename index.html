@@ -8,8 +8,8 @@
     <!-- 微信分享预览优化 -->
     <meta property="og:title" content="2026家庭影院技术峰会 - 邀请函">
     <meta property="og:description" content="探索视听新未来 · 共创智能新体验 · 5月20日 广州等你来！">
-    <meta property="og:image" content="https://m.hdavchina.com/share-preview.jpg">
-    <meta property="og:url" content="https://m.hdavchina.com">
+    <meta property="og:image" content="https://m.hdavchina.com/h5/share-preview.jpg">
+    <meta property="og:url" content="https://m.hdavchina.com/h5/">
     <meta property="og:type" content="website">
     
     <!-- 微信JSSDK -->
@@ -733,7 +733,7 @@
             const shareData = {
                 title: '2026家庭影院技术峰会邀请函',
                 text: '探索视听新未来 · 共创智能新体验，5月20日广州等你来！',
-                url: 'https://m.hdavchina.com'
+                url: 'https://m.hdavchina.com/h5/'
             };
 
             if (navigator.share) {
@@ -760,7 +760,7 @@
             
             if (isWeChat) {
                 // 获取微信签名
-                fetch('https://m.hdavchina.com/api/wechat-signature?url=' + encodeURIComponent(window.location.href))
+                fetch('/api/wechat-signature?url=' + encodeURIComponent(window.location.href))
                     .then(res => res.json())
                     .then(data => {
                         if (data.success) {
@@ -778,18 +778,18 @@
                                 wx.updateAppMessageShareData({
                                     title: '2026家庭影院技术峰会邀请函',
                                     desc: '探索视听新未来 · 共创智能新体验，5月20日广州等你来！',
-                                    link: 'https://m.hdavchina.com',
-                                    imgUrl: 'https://m.hdavchina.com/share-preview.jpg',
+                                    link: 'https://m.hdavchina.com/h5/',
+                                    imgUrl: 'https://m.hdavchina.com/h5/share-preview.jpg',
                                     success: function() {
                                         console.log('分享配置成功');
                                     }
                                 });
-                                
+
                                 // 配置分享到朋友圈
                                 wx.updateTimelineShareData({
                                     title: '2026家庭影院技术峰会邀请函',
-                                    link: 'https://m.hdavchina.com',
-                                    imgUrl: 'https://m.hdavchina.com/share-preview.jpg',
+                                    link: 'https://m.hdavchina.com/h5/',
+                                    imgUrl: 'https://m.hdavchina.com/h5/share-preview.jpg',
                                     success: function() {
                                         console.log('朋友圈分享配置成功');
                                     }
@@ -809,7 +809,7 @@
 
         // 复制链接
         function copyLink() {
-            const url = 'https://m.hdavchina.com';
+            const url = 'https://m.hdavchina.com/h5/';
             const input = document.createElement('input');
             input.value = url;
             document.body.appendChild(input);
