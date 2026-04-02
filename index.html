@@ -4,6 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>2026家庭影院技术峰会 - 邀请函</title>
+    
+    <!-- 微信分享预览优化 -->
+    <meta property="og:title" content="2026家庭影院技术峰会 - 邀请函">
+    <meta property="og:description" content="探索视听新未来 · 共创智能新体验 · 5月20日 广州等你来！">
+    <meta property="og:image" content="https://forum-h5-demo.vercel.app/share-preview.jpg">
+    <meta property="og:url" content="https://forum-h5-demo.vercel.app">
+    <meta property="og:type" content="website">
+    
+    <!-- 微信专用分享标签 -->
+    <meta name="wechat:title" content="2026家庭影院技术峰会">
+    <meta name="wechat:description" content="探索视听新未来 · 共创智能新体验">
+    <meta name="wechat:image" content="https://forum-h5-demo.vercel.app/share-preview.jpg">
+    
     <style>
         * {
             margin: 0;
@@ -411,6 +424,96 @@
         .share-btn:hover {
             background: rgba(255, 255, 255, 0.3);
         }
+
+        /* 分享提示弹窗 */
+        .share-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .share-modal.active {
+            display: flex;
+        }
+
+        .share-modal-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 90%;
+            width: 320px;
+            animation: slideInUp 0.3s ease;
+        }
+
+        .share-modal h3 {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .share-tips {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #fff;
+        }
+
+        .share-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .share-action-btn {
+            background: #fff;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-size: 1rem;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .share-action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .share-action-btn .icon {
+            font-size: 1.3rem;
+        }
+
+        .close-modal-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-modal-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
     </style>
 </head>
 <body>
@@ -496,9 +599,33 @@
         <div class="scroll-hint">↑ 滑动查看更多 ↓</div>
 
         <!-- 分享按钮 -->
-        <button class="share-btn" onclick="alert('分享成功！')">
+        <button class="share-btn" onclick="showShareModal()">
+            <span>📤</span>
             分享给好友
         </button>
+    </div>
+
+    <!-- 分享弹窗 -->
+    <div class="share-modal" id="shareModal" onclick="closeShareModal()">
+        <div class="share-modal-content" onclick="event.stopPropagation()">
+            <h3>📤 分享邀请函</h3>
+            <div class="share-tips">
+                💡 提示：点击下方按钮，选择分享到微信好友、朋友圈或其他平台
+            </div>
+            <div class="share-actions">
+                <button class="share-action-btn" onclick="nativeShare()">
+                    <span class="icon">🔗</span>
+                    系统分享（推荐）
+                </button>
+                <button class="share-action-btn" onclick="copyLink()">
+                    <span class="icon">📋</span>
+                    复制链接
+                </button>
+            </div>
+            <div style="margin-top: 20px;">
+                <button class="close-modal-btn" onclick="closeShareModal()">关闭</button>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -592,6 +719,54 @@
 
             document.getElementById('countdown').textContent =
                 `${days}天 ${hours}时 ${minutes}分`;
+        }
+
+        // 分享弹窗控制
+        function showShareModal() {
+            document.getElementById('shareModal').classList.add('active');
+        }
+
+        function closeShareModal() {
+            document.getElementById('shareModal').classList.remove('active');
+        }
+
+        // 系统原生分享
+        function nativeShare() {
+            const shareData = {
+                title: '2026家庭影院技术峰会邀请函',
+                text: '探索视听新未来 · 共创智能新体验，5月20日广州等你来！',
+                url: 'https://forum-h5-demo.vercel.app'
+            };
+
+            if (navigator.share) {
+                navigator.share(shareData)
+                    .then(() => {
+                        alert('分享成功！');
+                        closeShareModal();
+                    })
+                    .catch((err) => {
+                        console.log('分享失败:', err);
+                        // 如果原生分享失败，提示复制链接
+                        copyLink();
+                    });
+            } else {
+                // 浏览器不支持原生分享，直接复制链接
+                copyLink();
+            }
+        }
+
+        // 复制链接
+        function copyLink() {
+            const url = 'https://forum-h5-demo.vercel.app';
+            const input = document.createElement('input');
+            input.value = url;
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand('copy');
+            document.body.removeChild(input);
+            
+            alert('✅ 链接已复制！\n\n请打开微信，粘贴链接即可分享');
+            closeShareModal();
         }
 
         // 初始化
